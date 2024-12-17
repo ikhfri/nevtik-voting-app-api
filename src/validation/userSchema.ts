@@ -2,7 +2,7 @@ import {z} from "zod";
 
 export const loginSchema = z.object({
     nis: z.string().min(11, "NIS is Required"),
-    password: z.string().min(6).max(8, "Password must be less than 20 characters")
+    password: z.string().min(6 ,"password required")
 })
 
 export const registerSchema = z.object({

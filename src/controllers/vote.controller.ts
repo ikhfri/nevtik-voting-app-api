@@ -33,7 +33,6 @@ export const voteCandidate = async (req: Request, res: Response) => {
   }
 };
 
-
 export const getWinner = async (
   req: express.Request,
   res: express.Response
@@ -49,27 +48,33 @@ export const getWinner = async (
           candidateId: "desc",
         },
       },
-      take: 1,
+      take:3, 
     });
 
     if (result.length === 0) {
       return res.status(404).json({ message: "No winner found" });
     }
 
-    const winner = await prisma.candidate.findUnique({
+    const candidates = await prisma.candidate.findMany({
       where: {
-        id: result[0].candidateId,
+        id: {
+          in: result.map((r) => r.candidateId),
+        },
       },
     });
 
-    if (!winner) return res.status(404).json({ message: "No winner found" });
+    if (!candidates || candidates.length !== result.length) {
+      return res.status(404).json({ message: "Candidates not found" });
+    }
+
+    const winners = result.map((r, index) => ({
+      candidate: candidates[index], 
+      votes: r._count.candidateId, 
+    }));
 
     res.status(200).json({
-      message: "get winner successfully",
-      winner: {
-        ...winner,
-        votes: result[0]._count.candidateId,
-      },
+      message: "get winners successfully",
+      winners,
     });
   } catch (error) {
     res.status(500).json({ message: "An unexpected error occurred" });

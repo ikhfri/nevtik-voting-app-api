@@ -83,18 +83,23 @@ export const loginUser = async (req: Request, res: Response) => {
             maxAge: 60 * 60 * 1000
         })
 
-        const redirectPath = user.role === "ADMIN" ? "/dashboard" : "/vote";
-        res.redirect(redirectPath);
+        // const redirectPath = user.role === "ADMIN" ? "/dashboard" : "/vote";
+        // res.redirect(redirectPath);
 
         res.status(200).json({ message: "Login successful", user:{
             nis: user.nis,
             name: user.name,
             role: user.role
         },
-        redirect : redirectPath
+        // redirect : redirectPath
      });
 
     } catch (error) {
         res.status(500).json({ message: "Internal server error" });
     }
 }
+
+export const logout = (req: Request, res: Response) => {
+  res.clearCookie("token");
+  res.json({ message: "Logged out successfully" });
+};

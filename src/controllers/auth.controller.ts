@@ -103,3 +103,20 @@ export const logout = (req: Request, res: Response) => {
   res.clearCookie("token");
   res.json({ message: "Logged out successfully" });
 };
+
+
+export const getUserById = async (req: Request, res: Response) => {
+    const {id} = req.params;
+    try {
+        const user = await prisma.user.findUnique({
+            where: {
+                id,
+            }
+        });
+        res.status(200).json({ message: "User fetched successfully", user });
+    } catch (error) {
+        if (error instanceof Error) {
+            res.status(400).json({ message: error.message });
+        }
+    }
+}

@@ -3,11 +3,11 @@ import prisma from "../libs/prisma"
 
 export const checkIfVoted = async (req: Request, res: Response, next: NextFunction) => {
     try {
-        const  usesId = (req as any).user.id;
+        const  userId = (req as any).user.id;
 
         const exitingVote = await prisma.vote.findFirst({
             where: {
-                userId: usesId
+                userId: userId
             }
         })
 

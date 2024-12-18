@@ -110,3 +110,20 @@ export const getVotes = async (req: Request, res: Response) => {
     return res.status(500).json({ message: "An unexpected error occurred" });
   }
 }
+
+
+export const hasVoted = async (req: Request, res: Response) => {
+  try {
+    const userId = (req as any).user.id;
+    const vote = await prisma.vote.findFirst({
+      where: { userId },
+    });
+    if (vote) {
+      res.status(208).json({ message: "You have voted" });
+    } else {
+      res.status(200).json({ message: "You have not voted" });
+    }
+  } catch (error) {
+    return res.status(500).json({ message: "An unexpected error occurred" });
+  }
+}

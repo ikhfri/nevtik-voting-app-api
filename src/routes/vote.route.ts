@@ -8,8 +8,8 @@ import { checkIfVoted } from "../middleware/checkVoteMiddleware";
 const voteRouter = require("express").Router();
 
 voteRouter.post("/",authenticateJWT,checkIfVoted, voteCandidate);
-voteRouter.get("/winner", authenticateJWT, getWinner);
+voteRouter.get("/winner", authenticateJWT, authorizeAdmin,getWinner);
 voteRouter.get("/check", authenticateJWT, hasVoted);
-voteRouter.get("/statistics", authenticateJWT, getVotes);
+voteRouter.get("/statistics", authenticateJWT,authorizeAdmin, getVotes);
 
 export default voteRouter;

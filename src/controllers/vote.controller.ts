@@ -43,7 +43,8 @@ export const voteCandidate = async (req: Request, res: Response) => {
     }
   }
 };
-export const getWinner = async (
+
+export const getWinner = async ( 
   req: express.Request,
   res: express.Response
 ) => {

@@ -7,32 +7,42 @@ export const voteCandidate = async (req: Request, res: Response) => {
   const userId = (req as any).user.id;
 
   try {
-    const exitingVote = await prisma.vote.findUnique({
-      where: {
-        userId,
-      },
+    const candidate = await prisma.candidate.findUnique({
+      where: { id: candidateId },
     });
-    
-    if(exitingVote) return res.status(409).json({ message: "You have already voted" });
+
+    if (!candidate) {
+      return res.status(404).json({ message: "Candidate not found" });
+    }
+
+    const existingVote = await prisma.vote.findFirst({
+      where: { userId },
+    });
+
+    if (existingVote) {
+      return res.status(409).json({ message: "You have already voted" });
+    }
 
     const vote = await prisma.vote.create({
       data: {
         userId,
-        candidateId},
+        candidateId,
+      },
     });
-    res.status(201).json({
-         message: "Vote created successfully", vote 
-        });
 
+    res.status(201).json({
+      message: "Vote created successfully",
+      vote,
+    });
   } catch (error) {
-        if(error instanceof Error){
-            res.status(400).json({ 
-                message: error.message 
-            });
-        }
+    console.error(error);
+    if (error instanceof Error) {
+      res.status(400).json({ message: error.message });
+    } else {
+      res.status(500).json({ message: "Internal server error" });
+    }
   }
 };
-
 export const getWinner = async (
   req: express.Request,
   res: express.Response
@@ -80,3 +90,23 @@ export const getWinner = async (
     res.status(500).json({ message: "An unexpected error occurred" });
   }
 };
+
+
+
+export const getVotes = async (req: Request, res: Response) => {
+  try {
+    
+    const totalUser = await prisma.user.count();
+    const userVoted = await prisma.vote.count();
+    const userNotvoted = totalUser - userVoted;
+
+    res.status(200).json({
+      message: "get votes successfully",
+      totalUser,
+      userVoted,
+      userNotvoted
+    })
+  } catch (error) {
+    return res.status(500).json({ message: "An unexpected error occurred" });
+  }
+}

@@ -72,6 +72,7 @@ export const loginUser = async (req: Request, res: Response) => {
 
 
         const token = generateToken({
+            id: user.id,
             nis: user.nis,
             name: user.name,
             role: user.role
@@ -85,9 +86,11 @@ export const loginUser = async (req: Request, res: Response) => {
 
 
         res.status(200).json({ message: "Login successful", user:{
+            id: user.id,
             nis: user.nis,
             name: user.name,
-            role: user.role
+            role: user.role,
+            token
         },
      });
 

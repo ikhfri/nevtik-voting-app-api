@@ -31,13 +31,18 @@ export const getCandidates = async (req: express.Request, res: express.Response)
 
 export const createCandidate = async (req: express.Request, res: express.Response) => {
     const { name, vision, mission } = candidateSchema.parse(req.body);
+    const image = req.file?.filename;
 
     try {
+        
+        if(!image) return res.status(400).json({ message: "Image is required" });
+
         const newCandidate = await prisma.candidate.create({
             data: {
                 name,
                 vision,
-                mission
+                mission,
+                image
             }
         })
         res.status(201).json({ message: "Candidate created successfully", newCandidate });

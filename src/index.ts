@@ -4,6 +4,7 @@ import authRouter from "./routes/user.route";
 import candiatesRouter from "./routes/candidate.route";
 import cookieParser from "cookie-parser";
 import voteRouter from "./routes/vote.route";
+import path from "path";
 
 const app = express();
 const PORT = 8000;
@@ -16,7 +17,7 @@ app.use(
 );
 app.use(cookieParser());
 app.use(express.json());
-
+app.use("/uploads", express.static(path.join(__dirname, "../../images")));
 app.use("/auth", authRouter);
 app.use("/candidates", candiatesRouter)
 app.use("/vote", voteRouter)

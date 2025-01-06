@@ -15,8 +15,11 @@ app.use(
   })
 );
 
-app.use("/uploads", express.static("images"));
+app.get("/", (req, res) => {
+  res.send("server is running!");
+})
 
+app.use("/uploads", express.static("images"));
 app.use(cookieParser());
 app.use(express.json());
 app.use("/auth", authRouter);
@@ -26,3 +29,5 @@ app.use("/vote", voteRouter)
 app.listen(PORT, () => {
   console.log(`Server is running on http://localhost:${PORT}`);
 });
+
+export default app

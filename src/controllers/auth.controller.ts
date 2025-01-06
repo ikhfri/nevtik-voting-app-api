@@ -71,7 +71,6 @@ export const loginUser = async (req: Request, res: Response) => {
             return res.status(401).json({ message: "Invalid NIS or Password" });
         }
 
-
         const token = generateToken({
             id: user.id,
             nis: user.nis,

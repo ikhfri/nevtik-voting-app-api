@@ -129,3 +129,15 @@ export const hasVoted = async (req: Request, res: Response) => {
   }
 }
 
+
+export const getVotesById = async (req: Request, res: Response) => {
+  const { id } = req.params;
+  try {
+    const voteCount = await prisma.vote.count({
+      where: { candidateId: id },
+    });
+    res.status(200).json({ message: "get votes successfully", votes: voteCount });
+  } catch (error) {
+    return res.status(500).json({ message: "An unexpected error occurred" });
+  }
+}

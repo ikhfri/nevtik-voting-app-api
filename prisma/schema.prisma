@@ -3,7 +3,7 @@ generator client {
 }
 
 datasource db {
-  provider = "mysql"  
+  provider = "postgresql"  
   url      = env("DATABASE_URL")
 }
 model User {
@@ -29,9 +29,10 @@ model Candidate {
   updatedAt DateTime @updatedAt
 }
 
+
 model Vote {
   id          String   @id @default(cuid())
-  user        User     @relation(fields: [userId], references: [id]) 
+  user        User     @relation(fields: [userId], references: [id], onDelete: Cascade)
   userId      String   @unique
   candidate   Candidate @relation(fields: [candidateId], references: [id])
   candidateId String

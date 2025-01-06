@@ -4,6 +4,7 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
+    "build": "prisma generate && next build",
     "dev": "ts-node-dev src/index.ts"
   },
   "keywords": [],
